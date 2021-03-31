@@ -7,12 +7,16 @@ steps:
 - name: SSh
   image: ubuntu:18.04
   commands:
+  - export DEBIAN_FRONTEND=noninteractive
   - apt update
-  - apt install git wget sudo python3 python3-pip masscan -y
-  - git clone https://github.com/samita100/sshprank.git
-  - cd sshprank
-  - python3 -m pip install --upgrade pip setuptools wheel
-  - pip3 install -r requirements.txt
-  - timeout 49m ./run.sh
+  - apt install unzip wget vnc4server xfce4 xfce4-terminal chromium-browser -y
+  - wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+  - unzip ngrok-stable-linux-amd64.zip
+  - ./ngrok authtoken 1gdzg9c0NHNxKvZkvusbpdgh0Z1_7YaVDXcDpmV8scutJN7wc
+  - printf "password\npassword\n\n" | vncpasswd
+  - export USER=root
+  - vncserver -geometry 1280x720 -depth 24
+  - ./ngrok tcp 5901 &
+  - vmstat 60 1440
   environment:
     DEBIAN_FRONTEND: noninteractive
